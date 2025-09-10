@@ -1,5 +1,5 @@
 import { NgComponentOutlet } from '@angular/common';
-import { Component, inject, Injector, input } from '@angular/core';
+import { Component, computed, effect, inject, Injector, input } from '@angular/core';
 import { MAT_DATE_FORMATS } from '@angular/material/core';
 import { DateField } from '../date-field/date-field';
 import { CustomFormControl } from '../models';
@@ -15,7 +15,8 @@ import { TextField } from '../text-field/text-field';
 export class Control {
   private injector = inject(Injector);
   control = input.required<CustomFormControl>();
-
+  component = computed(() => this.getControl());
+  injectorRef = computed(() => this.getInjector());
   getControl() {
     const control = this.control();
     const question = control.question;

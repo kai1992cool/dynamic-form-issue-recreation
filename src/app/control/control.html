@@ -1,9 +1,12 @@
 @let formControl = control();
-
-<ng-content
-  *ngComponentOutlet="
-    getControl();
-    inputs: { control: formControl };
-    injector: getInjector()
-  "
-></ng-content>
+@let injectorRefVal = injectorRef();
+@let componentRef = component();
+@if(componentRef && injectorRefVal) {
+  <ng-content
+    *ngComponentOutlet="
+    componentRef;
+      inputs: { control: formControl };
+      injector: injectorRefVal
+    "
+  ></ng-content>
+}
