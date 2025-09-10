@@ -1,0 +1,7 @@
+@let group = formGroup();
+
+<form [formGroup]="group" class="flex flex-col">
+  @for(control of group.controls | controls; track $index) {
+  <app-control [control]="control"></app-control>
+  }
+</form>

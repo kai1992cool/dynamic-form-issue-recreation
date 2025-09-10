@@ -1,59 +1,50 @@
-# DynamicForm
+# Dynamic Form
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.1.4.
+This codebase is meant to demonstrate an issue I am having generating dynamic forms.
 
-## Development server
+## Setting up the codebase
 
-To start a local development server, run:
+Please run `npm install` and then `npm run start` and you will see the problem.
 
-```bash
-ng serve
+## What I'm trying to do
+
+I am trying to generate dynamic forms based on a set of [questions](./src/app/models.ts#L15) I receive from an API.
+
+When the app inits I will dispatch a state action that will call the mock API to get the questions and then the questions are stored in state ([ngxs](https://ngxs.io)).
+
+Then I will give those questions to the [Section component](./src/app/section/section.ts)
+
+The [Section component](./src/app/section/section.ts#L31) then turns the array of questions into a [Custom Form Group](./src/app/models.ts#L57) and each [question](./src/app/models.ts#L15) is turned into a [Custom Form Control](./src/app/models.ts#L56).
+
+the [Section component](./src/app/section/section.html#L4) uses a @for loop to iterate over the controls of the form group and turns them into a [Control Component](./src/app/control/control.ts).
+
+The [Control Component](./src/app/control/control.html#L3) uses the `ng-content` tag to dynamically render each control.
+
+<b>The main thing that I'm trying to accomplish is to have dynamic Date Formats by dynamically injecting MAT_DATE_FORMATS into the component when we are rendering a Date Field.
+
+However I keep running into the following error:</b>
+
+<img src="./images/error.png" />
+
+## What I've tried
+
+To get the dynamic date formats I've tried updating the MAT_DATE_FORMATS in the Date Field component.
+
+```typescript
+  formats = inject(MAT_DATE_FORMATS);
+
+  constructor() {
+    super();
+
+    afterNextRender(() => {
+      const format = this.control().question.dateFormat;
+
+      if (format) {
+        this.formats.display.dateInput = format;
+        this.formats.parse.dateInput = format;
+      }
+    });
+  }
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+However, if there were multiple date fields in the Questions array then the last date field format would override all the other date fields. That is what led me to try and render the components dynamically using `ng-content`.

@@ -1,0 +1,14 @@
+@let formControl = control();
+
+<mat-form-field>
+  <mat-label>{{ formControl.question.label }}</mat-label>
+  <input
+    matInput
+    [required]="formControl.question.required === true"
+    (keypress)="onKeyPress($event)"
+    [formControl]="formControl"
+    [matDatepicker]="picker"
+  />
+  <mat-datepicker #picker></mat-datepicker>
+  <mat-datepicker-toggle matIconSuffix [for]="picker"> </mat-datepicker-toggle>
+</mat-form-field>

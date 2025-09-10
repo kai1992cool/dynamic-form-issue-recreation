@@ -1,0 +1,11 @@
+@let formControl = control();
+
+<mat-form-field>
+  <mat-label>{{ formControl.question.label }}</mat-label>
+  <input
+    matInput
+    [formControl]="formControl"
+    [type]="formControl.question.type === 'Text' ? 'text' : 'number'"
+    [required]="formControl.question.required === true"
+  />
+</mat-form-field>

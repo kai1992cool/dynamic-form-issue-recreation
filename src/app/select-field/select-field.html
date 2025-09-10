@@ -1,0 +1,10 @@
+@let formControl = control();
+
+<mat-form-field>
+  <mat-label>{{ formControl.question.label }}</mat-label>
+  <mat-select matInput [required]="formControl.question.required === true">
+    @for(option of formControl.question.options; track $index) {
+    <mat-option [value]="option.value">{{ option.label }}</mat-option>
+    }
+  </mat-select>
+</mat-form-field>

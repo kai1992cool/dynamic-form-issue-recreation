@@ -1,12 +1,25 @@
-import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { afterNextRender, Component, inject } from '@angular/core';
+import { Store } from '@ngxs/store';
+import { StoreModel } from './models';
+import { Section } from './section/section';
+import { GetQuestions } from './store';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  imports: [Section],
   templateUrl: './app.html',
-  styleUrl: './app.scss'
+  styleUrl: './app.scss',
 })
 export class App {
-  protected readonly title = signal('dynamic-form');
+  private store = inject(Store);
+
+  public questions = this.store.selectSignal(
+    (state: StoreModel) => state.mystore.questions
+  );
+
+  constructor() {
+    afterNextRender(() => {
+      this.store.dispatch(new GetQuestions());
+    });
+  }
 }

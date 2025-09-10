@@ -1,0 +1,9 @@
+@let formControl = control();
+
+<ng-content
+  *ngComponentOutlet="
+    getControl();
+    inputs: { control: formControl };
+    injector: getInjector()
+  "
+></ng-content>
