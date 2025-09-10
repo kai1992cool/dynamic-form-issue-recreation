@@ -7,6 +7,7 @@ import {
 import { Control } from '../control/control';
 import { CustomFormControl, CustomFormGroup, Question } from '../models';
 
+// @ts-ignore
 @Pipe({
   name: 'controls',
 })
